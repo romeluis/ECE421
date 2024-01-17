@@ -5,18 +5,23 @@ from sklearn.metrics import confusion_matrix
 
 def fit_perceptron(X_train, y_train):
     #Add implementation here 
+    pass
 
 def errorPer(X_train,y_train,w):
     #Add implementation here 
+    pass
 
 def confMatrix(X_train,y_train,w):
-    #Add implementation here 
+    #Add implementation here
+    pass 
 
 def pred(X_train,w):
     #Add implementation here
+    pass
 
 def test_SciKit(X_train, X_test, Y_train, Y_test):
     #Add implementation here 
+    pass
 
 def test_Part1():
     from sklearn.datasets import load_iris

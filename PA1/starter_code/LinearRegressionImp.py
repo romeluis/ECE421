@@ -7,15 +7,19 @@ from sklearn.metrics import mean_squared_error
 
 def fit_LinRegr(X_train, y_train):
     #Add implementation here
+   pass
 
 def mse(X_train,y_train,w):
     #Add implementation here
+    pass
 
 def pred(X_train,w):
     #Add implementation here
+    pass
 
 def test_SciKit(X_train, X_test, Y_train, Y_test):
     #Add implementation here
+    pass
 
 def subtestFn():
     # This function tests if your solution is robust against singular matrix
