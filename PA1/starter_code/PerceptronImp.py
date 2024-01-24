@@ -4,20 +4,68 @@ from sklearn.linear_model import Perceptron
 from sklearn.metrics import confusion_matrix 
 
 def fit_perceptron(X_train, y_train):
-    #Add implementation here 
-    pass
+    max_epochs = 5000
 
-def errorPer(X_train,y_train,w):
-    #Add implementation here 
-    pass
+    w = np.zeros(len(X_train[0]) + 1)
+    
+    ones_to_be_added = np.ones(len(X_train))
+    X = np.hstack((np.atleast_2d(ones_to_be_added).T, X_train))
+    
+    best_w = w
+    best_error = float('inf')
+    
+    for epoch in range(max_epochs):        
+        for i, x_i in enumerate(X):
+            prediction = pred(x_i, w)
+            if prediction != y_train[i]:
+                w = w + x_i * y_train[i]
+        
+        epoch_error = errorPer(X, y_train, w)
+        if epoch_error < best_error:
+            best_error = epoch_error
+            best_w = w
+    
+    return best_w
 
-def confMatrix(X_train,y_train,w):
-    #Add implementation here
-    pass 
+def errorPer(X, y_train, w):
+    misclassifed = 0
+    
+    for i, x_i in enumerate(X):
+        prediction = pred(x_i, w)
+        if prediction != y_train[i]:
+            misclassifed += 1
+            
+    return misclassifed / len(X)        
 
-def pred(X_train,w):
-    #Add implementation here
-    pass
+def pred(X_i, w):
+    dot_product = np.dot(X_i, w)
+        
+    if dot_product > 0:
+        return 1
+    else:
+        return -1
+    
+def confMatrix(X_train, y_train, w):
+    ones_to_be_added = np.ones(len(X_train))
+    X = np.hstack((np.atleast_2d(ones_to_be_added).T, X_train))
+    
+    matrix = [[0, 0], [0, 0]]
+    
+    for i, x_i in enumerate(X):
+        prediction = pred(x_i, w)
+        if y_train[i] == -1:
+            if prediction == -1:
+                matrix[0][0] += 1
+            else:
+                matrix[0][1] += 1
+        elif y_train[i] == 1:
+            if prediction == -1:
+                matrix[1][0] += 1
+            else:
+                matrix[1][1] += 1
+                
+    return matrix
+                
 
 def test_SciKit(X_train, X_test, Y_train, Y_test):
     #Add implementation here 
