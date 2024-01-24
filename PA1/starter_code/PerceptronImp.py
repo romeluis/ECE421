@@ -68,8 +68,13 @@ def confMatrix(X_train, y_train, w):
                 
 
 def test_SciKit(X_train, X_test, Y_train, Y_test):
-    #Add implementation here 
-    pass
+    clf = Perceptron(tol=1e-3, max_iter=5000, early_stopping=False)
+    
+    clf.fit(X_train, Y_train)
+    
+    y_pred = clf.predict(X_test)
+    
+    return confusion_matrix(Y_test, y_pred)
 
 def test_Part1():
     from sklearn.datasets import load_iris
