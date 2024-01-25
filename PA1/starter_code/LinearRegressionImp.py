@@ -6,16 +6,20 @@ from sklearn.metrics import mean_squared_error
 
 
 def fit_LinRegr(X_train, y_train):
-    #Add implementation here
-   pass
+    X_train = np.hstack((np.ones((X_train.shape[0], 1)), X_train))
+    w = np.dot(np.dot(np.linalg.pinv(np.dot(X_train.T, X_train)), X_train.T), y_train)
 
-def mse(X_train,y_train,w):
-    #Add implementation here
-    pass
+    return w
 
-def pred(X_train,w):
-    #Add implementation here
-    pass
+def mse(X_train, y_train, w):
+    X_train = np.hstack((np.ones((X_train.shape[0], 1)), X_train))
+    y_pred = pred(X_train, w)
+    
+    return np.mean((y_train - y_pred) ** 2)
+
+def pred(X_i, w):
+    pred = np.dot(X_i, w)
+    return pred
 
 def test_SciKit(X_train, X_test, Y_train, Y_test):
     #Add implementation here
