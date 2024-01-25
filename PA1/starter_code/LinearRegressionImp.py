@@ -22,8 +22,11 @@ def pred(X_i, w):
     return pred
 
 def test_SciKit(X_train, X_test, Y_train, Y_test):
-    #Add implementation here
-    pass
+    linear_regression_model = linear_model.LinearRegression()
+    
+    linear_regression_model.fit(X_train, Y_train)
+    y_pred = linear_regression_model.predict(X_test)
+    return mean_squared_error(Y_test, y_pred)
 
 def subtestFn():
     # This function tests if your solution is robust against singular matrix
