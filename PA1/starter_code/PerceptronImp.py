@@ -3,11 +3,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Perceptron
 from sklearn.metrics import confusion_matrix 
 
+# Function to fit the perceptron using the Pocket algorithm
 def fit_perceptron(X_train, y_train):
     max_epochs = 5000
 
+    # Initialize weights with zeros
     w = np.zeros(len(X_train[0]) + 1)
     
+    # Add a column of ones to X_train for the bias term
     ones_to_be_added = np.ones(len(X_train))
     X = np.hstack((np.atleast_2d(ones_to_be_added).T, X_train))
     
@@ -27,16 +30,18 @@ def fit_perceptron(X_train, y_train):
     
     return best_w
 
+# Function to calculate the classification error rate
 def errorPer(X, y_train, w):
-    misclassifed = 0
+    misclassified = 0
     
     for i, x_i in enumerate(X):
         prediction = pred(x_i, w)
         if prediction != y_train[i]:
-            misclassifed += 1
+            misclassified += 1
             
-    return misclassifed / len(X)        
+    return misclassified / len(X)        
 
+# Function to make predictions using weights
 def pred(X_i, w):
     dot_product = np.dot(X_i, w)
         
@@ -44,7 +49,8 @@ def pred(X_i, w):
         return 1
     else:
         return -1
-    
+
+# Function to calculate the confusion matrix
 def confMatrix(X_train, y_train, w):
     ones_to_be_added = np.ones(len(X_train))
     X = np.hstack((np.atleast_2d(ones_to_be_added).T, X_train))
@@ -65,8 +71,8 @@ def confMatrix(X_train, y_train, w):
                 matrix[1][1] += 1
                 
     return matrix
-                
 
+# Function to test perceptron using scikit-learn and print confusion matrices
 def test_SciKit(X_train, X_test, Y_train, Y_test):
     clf = Perceptron(tol=1e-3, max_iter=5000, early_stopping=False)
     
@@ -76,28 +82,29 @@ def test_SciKit(X_train, X_test, Y_train, Y_test):
     
     return confusion_matrix(Y_test, y_pred)
 
+# Main function to test the perceptron on a given dataset
 def test_Part1():
     from sklearn.datasets import load_iris
     X_train, y_train = load_iris(return_X_y=True)
-    X_train, X_test, y_train, y_test = train_test_split(X_train[50:],y_train[50:],test_size=0.2)
+    X_train, X_test, y_train, y_test = train_test_split(X_train[50:], y_train[50:], test_size=0.2)
 
-    #Set the labels to +1 and -1
+    # Set the labels to +1 and -1
     y_train[y_train == 1] = 1
     y_train[y_train != 1] = -1
     y_test[y_test == 1] = 1
     y_test[y_test != 1] = -1
 
-    #Pocket algorithm using Numpy
-    w=fit_perceptron(X_train,y_train)
-    cM=confMatrix(X_test,y_test,w)
+    # Pocket algorithm using Numpy
+    w = fit_perceptron(X_train, y_train)
+    cM = confMatrix(X_test, y_test, w)
 
-    #Pocket algorithm using scikit-learn
-    sciKit=test_SciKit(X_train, X_test, y_train, y_test)
+    # Pocket algorithm using scikit-learn
+    sciKit = test_SciKit(X_train, X_test, y_train, y_test)
     
-    #Print the result
-    print ('--------------Test Result-------------------')
-    print("Confusion Matrix is from Part 1a is: ",cM)
-    print("Confusion Matrix from Part 1b is:",sciKit)
-    
+    # Print the result
+    print('--------------Test Result-------------------')
+    print("Confusion Matrix is from Part 1a is: ", cM)
+    print("Confusion Matrix from Part 1b is:", sciKit)
 
+# Run the test function
 test_Part1()
