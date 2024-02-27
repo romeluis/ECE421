@@ -10,6 +10,7 @@ from sklearn.metrics import confusion_matrix
 
 def fit_NeuralNetwork(X_train,y_train,alpha,hidden_layer_sizes,epochs):
     #Enter implementation here
+<<<<<<< HEAD
     pass
     
 def forwardPropagation(x, weights):
@@ -73,6 +74,50 @@ def plotErr(e,epochs):
 def test_SciKit(X_train, X_test, Y_train, Y_test):
     #Enter implementation here
     pass
+=======
+    
+def forwardPropagation(x, weights):
+    #Enter implementation here
+
+def errorPerSample(X,y_n):
+    #Enter implementation here
+
+def backPropagation(X,y_n,s,weights):
+    #Enter implementation here
+
+def updateWeights(weights,g,alpha):
+    #Enter implementation here
+
+def activation(s):
+    #Enter implementation here
+
+def derivativeActivation(s):
+    #Enter implementation here
+
+def outputf(s):
+    #Enter implementation here
+
+def derivativeOutput(s):
+    #Enter implementation here
+
+def errorf(x_L,y):
+    #Enter implementation here
+
+def derivativeError(x_L,y):
+    #Enter implementation here
+
+def pred(x_n,weights):
+    #Enter implementation here
+    
+def confMatrix(X_train,y_train,w):
+    #Enter implementation here
+
+def plotErr(e,epochs):
+    #Enter implementation here
+    
+def test_SciKit(X_train, X_test, Y_train, Y_test):
+    #Enter implementation here
+>>>>>>> 2a96e76b8782c87d9c616338492c3896c714ef38
 
 def test_Part1():
     from sklearn.datasets import load_iris
