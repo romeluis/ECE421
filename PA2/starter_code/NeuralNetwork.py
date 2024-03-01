@@ -215,21 +215,25 @@ def confMatrix(X_train, y_train, w):
                 matrix[0][1] += 1
         elif y_train[i] == 1:
             if prediction == -1:
-                matrix[1][0] += 1
-            else:
                 matrix[1][1] += 1
+            else:
+                matrix[1][0] += 1
                 
     return matrix
 
 def plotErr(e,epochs):
     #Enter implementation here
-    plt.plot(epochs, e, linewidth = 2.0)
+    plt.plot(range(epochs), e, linewidth=2.0)
     plt.show()
 
     
 def test_SciKit(X_train, X_test, Y_train, Y_test):
     #Enter implementation here
-    pass
+    model = MLPClassifier(alpha=0.00001, hidden_layer_sizes=(30, 10), random_state=1)
+    model.fit(X_train, Y_train)
+    y_pred = model.predict(X_test)
+    
+    return confusion_matrix(Y_test, y_pred)
 
 def test_Part1():
     from sklearn.datasets import load_iris
@@ -249,13 +253,13 @@ def test_Part1():
         
     err, w = fit_NeuralNetwork(X_train, y_train, 1e-2, [30, 10], 100)
     
-    # plotErr(err,100)
+    plotErr(err, 100)
     
     cM = confMatrix(X_test,y_test,w)
     
-    # sciKit = test_SciKit(X_train, X_test, y_train, y_test)
+    sciKit = test_SciKit(X_train, X_test, y_train, y_test)
     
     print("Confusion Matrix is from Part 1a is: ",cM)
-    # print("Confusion Matrix from Part 1b is:",sciKit)
+    print("Confusion Matrix from Part 1b is:",sciKit)
 
 test_Part1()
