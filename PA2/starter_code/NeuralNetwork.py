@@ -36,6 +36,7 @@ def fit_NeuralNetwork(X_train, y_train, alpha, hidden_layer_sizes, epochs):
     weights.append(weight_layer) 
     
     for e in range(epochs):
+        print(e)
         choiceArray = np.arange(0, N)
         np.random.shuffle(choiceArray)
         errN = 0
@@ -64,26 +65,16 @@ def forwardPropagation(x, weights):
     retX.append(currX)
 
     for i in range(l - 1):
-        
-        print(x)
-        # print("ubnrgo")
-        print(len(weights[i]))
-        currS = np.dot(x, weights[i]) # TODO: Dot product between the layer and the weight matrix
-        # print(currS)
+
+        currS = np.dot(retX[-1], weights[i]) # TODO: Dot product between the layer and the weight matrix
         retS.append(currS)
-        # print(currS)
-        # print(len(currS))
         
         currX = currS
-        # print(currX)
-        
         
         if i != len(weights) - 1:
             for j in range(len(currS)):
-                # print(currS[i][j])
                 currX[j] = activation(currS[j]) # TODO: Apply the activation
             
-            # print(currX)
             currX = np.hstack(([1], currX))
             
         else:
@@ -91,17 +82,16 @@ def forwardPropagation(x, weights):
             
         retX.append(currX)
         
-        
     return retX, retS
 
 def errorPerSample(X, y_n):
     #Enter implementation here
-    return errorf(X, y_n)
+    return errorf(X[-1][0], y_n)
 
 def backPropagation(X, y_n, s, weights):
     #Enter implementation here
     l = len(X)
-    delL = []
+    delL = list()
 
     delL.insert(0, derivativeError(X[l - 1], y_n) * derivativeOutput(s[l - 2]))
     curr = 0
@@ -118,7 +108,7 @@ def backPropagation(X, y_n, s, weights):
             for k in range(len(s[i])):
                 
                 #TODO: calculate delta at node j
-                delN[j] = delN[j] + delNextLayer * WeightsNextLayer * activation(sCurrLayer) # Fill in the rest
+                delN[j] = delN[j] + derivativeActivation(sCurrLayer[k]) * (np.dot(np.transpose(WeightsNextLayer[j]), delNextLayer)) # Fill in the rest
         
         delL.insert(0, delN)
     
@@ -137,7 +127,11 @@ def backPropagation(X, y_n, s, weights):
             for k in range(cols):
                 
                 #TODO: Calculate the gradient using currX and currdelL
-                gL[j, k] = currX * currdelL # Fill in here
+                # print(currX)
+                # print(currdelL)
+                cx = currX[j]
+                cd = currdelL[j] if j < len(currdelL) else 0
+                gL[j, k] = cx * cd # Fill in here
                 
         g.append(gL)
         
@@ -156,8 +150,8 @@ def updateWeights(weights, g, alpha):
             for k in range(cols):
                 
                 #TODO: Gradient Descent Update
-                currWeight[j, k] = currWeight[j, k] - alpha * currG # Fill in here
-                
+                currWeight[j, k] = currWeight[j, k] - alpha * currG[j, k] # Fill in here
+
         nW.append(currWeight)
         
     return nW
@@ -194,15 +188,44 @@ def derivativeError(x_L, y):
 
 def pred(x_n, weights):
     #Enter implementation here
-    pass
+    # TODO: prediction using the forwardPropagation function
+    retX, retS = forwardPropagation(x_n, weights) # Fill in here
+    l=len(retX)
+
+    # Return -1 if probability lesser than 0.5
+    # Else return 1
+    if retX[l - 1] < 0.5:
+        return -1
+    else:
+        return 1
     
 def confMatrix(X_train, y_train, w):
     #Enter implementation here
-    pass
+    ones_to_be_added = np.ones(len(X_train))
+    X = np.hstack((np.atleast_2d(ones_to_be_added).T, X_train))
+    
+    matrix = [[0, 0], [0, 0]]
+    
+    for i, x_i in enumerate(X):
+        prediction = pred(x_i, w)
+        if y_train[i] == -1:
+            if prediction == -1:
+                matrix[0][0] += 1
+            else:
+                matrix[0][1] += 1
+        elif y_train[i] == 1:
+            if prediction == -1:
+                matrix[1][0] += 1
+            else:
+                matrix[1][1] += 1
+                
+    return matrix
 
 def plotErr(e,epochs):
     #Enter implementation here
-    pass
+    plt.plot(epochs, e, linewidth = 2.0)
+    plt.show()
+
     
 def test_SciKit(X_train, X_test, Y_train, Y_test):
     #Enter implementation here
@@ -224,15 +247,15 @@ def test_Part1():
         else:
             y_test[j]=1
         
-    err, w = fit_NeuralNetwork(X_train,y_train, 1e-2, [30, 10], 100)
+    err, w = fit_NeuralNetwork(X_train, y_train, 1e-2, [30, 10], 100)
     
     # plotErr(err,100)
     
-    # cM = confMatrix(X_test,y_test,w)
+    cM = confMatrix(X_test,y_test,w)
     
-    sciKit = test_SciKit(X_train, X_test, y_train, y_test)
+    # sciKit = test_SciKit(X_train, X_test, y_train, y_test)
     
     print("Confusion Matrix is from Part 1a is: ",cM)
-    print("Confusion Matrix from Part 1b is:",sciKit)
+    # print("Confusion Matrix from Part 1b is:",sciKit)
 
 test_Part1()
